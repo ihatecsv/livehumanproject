@@ -1,0 +1,10 @@
+html, body {
+  background-color: black;
+  margin: 0;
+}
+
+#timeline-line {
+  position: absolute;
+  background-color: white;
+  padding-bottom: 2px;
+}
