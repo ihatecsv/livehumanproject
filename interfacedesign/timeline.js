@@ -6,13 +6,19 @@ const map = function(x, in_min, in_max, out_min, out_max) {
 const timelineLineElem = document.getElementById("timeline-line");
 const timelineRangesElem = document.getElementById("timeline-ranges");
 
-const timeRange = [0, 120]; //2m
+let timeRange = [0, 120]; //2m
+
+let timelineYLocation = window.innerHeight/2;
+let widthOfWindow = window.innerWidth;
+let secondsPerPixel = widthOfWindow/(timeRange[1]-timeRange[0]);
 
 let activeRanges = [];
 
 const drawFrame = function(){
-  const timelineYLocation = window.innerHeight/2;
-  const widthOfWindow = window.innerWidth;
+  timelineYLocation = window.innerHeight/2;
+  widthOfWindow = window.innerWidth;
+  secondsPerPixel = (timeRange[1]-timeRange[0])/widthOfWindow;
+
   timelineLineElem.style.top = timelineYLocation + "px";
   timelineLineElem.style.width = widthOfWindow + "px";
 
@@ -44,5 +50,16 @@ const addRange = function(range, color){
 
 addRange([10, 30], "#F00");
 addRange([45, 80], "#0F0");
+addRange([80, 110], "#00F");
 
 drawFrame();
+
+window.addEventListener("wheel", function(evt) {
+  const pixelsScrolled = evt.deltaY;
+  const scrollScaleFactor = 4;
+  const rangeDelta = pixelsScrolled*secondsPerPixel*scrollScaleFactor;
+  if(timeRange[0] + rangeDelta >= 0){
+    timeRange[0] += rangeDelta;
+    timeRange[1] += rangeDelta;
+  }
+});
